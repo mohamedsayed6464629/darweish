@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphic Design Requests</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007BFF;
+        }
+
+        form label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+
+        form input, form select, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        form button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #555;
+        }
+
+        .success-message {
+            text-align: center;
+            color: green;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Request Your Design</h1>
+    </header>
+
+    <div class="container">
+        <h2>Design Request Form</h2>
+        <form id="designRequestForm">
+            <label for="designType">Type of Design:</label>
+            <select id="designType" name="designType">
+                <option value="logo">Logo</option>
+                <option value="banner">Banner</option>
+                <option value="poster">Poster</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label for="description">Design Description:</label>
+            <textarea id="description" name="description" rows="5" placeholder="Describe your design (colors, style, etc.)"></textarea>
+
+            <label for="contactInfo">Contact Information (Email or Phone):</label>
+            <input type="text" id="contactInfo" name="contactInfo" placeholder="Enter your email or phone number">
+
+            <label for="budget">Budget (in $):</label>
+            <input type="text" id="budget" name="budget" placeholder="Enter your budget">
+
+            <label for="referenceImage">Reference Image (Optional):</label>
+            <input type="text" id="referenceImage" name="referenceImage" placeholder="Paste a link to a reference image">
+
+            <button type="submit">Submit Request</button>
+        </form>
+        <p class="success-message" id="successMessage" style="display: none;">Your request has been submitted successfully!</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DARWEISH STORE. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('designRequestForm');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            // Webhook URL الخاص بـ Discord
+            const webhookURL = "https://discord.com/api/webhooks/1328425090357919794/lz_RTqJCXfFQ1ziJvmoIU4--oAAG6IjWFDixh0-afxikXPXqRb9gYq5dxsBHxgNKhgVM"; // استبدال Webhook الخاص بك
+
+            // الحصول على البيانات من النموذج
+            const designType = document.getElementById('designType').value;
+            const description = document.getElementById('description').value;
+            const contactInfo = document.getElementById('contactInfo').value;
+            const budget = document.getElementById('budget').value;
+            const referenceImage = document.getElementById('referenceImage').value;
+
+            // التحقق من صحة المدخلات
+            if (!contactInfo) {
+                alert('Please provide your contact information.');
+                return;
+            }
+
+            // إعداد رسالة الإرسال
+            const payload = {
+                content: `New Design Request:\n\n**Design Type:** ${designType}\n**Description:** ${description}\n**Contact Info:** ${contactInfo}\n**Budget:** $${budget}\n**Reference Image:** ${referenceImage || "None"}`
+            };
+
+            try {
+                // إرسال الطلب إلى Webhook
+                const response = await fetch(webhookURL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+
+                if (response.ok) {
+                    // عرض رسالة نجاح
+                    successMessage.style.display = 'block';
+                    form.reset();
+                } else {
+                    alert('Failed to send the request. Please try again later.');
+                }
+            } catch (error) {
+                alert('An error occurred while sending the request.');
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>
